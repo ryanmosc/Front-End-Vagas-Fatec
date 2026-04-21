@@ -95,7 +95,9 @@ a.link,span.link{color:var(--red);text-decoration:none;font-weight:600;cursor:po
 .navbar{background:var(--surface);border-bottom:2px solid var(--red);position:sticky;top:0;z-index:200;box-shadow:var(--sh);transition:background var(--t),border-color var(--t)}
 .nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;flex-shrink:0}
-.nav-logo-box{width:36px;height:36px;background:var(--red);border-radius:var(--r6);display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--fd);font-weight:800;font-size:16px;transition:background var(--t)}
+.nav-logo-box{width:36px;height:36px;background:var(--red);border-radius:var(--r6);display:flex;align-items:center;justify-content:center;overflow:hidden;transition:background var(--t);flex-shrink:0}
+.nav-logo-box img{width:100%;height:100%;object-fit:contain;display:block;padding:4px;filter:brightness(0) invert(1)}
+html.dark .nav-logo-box img{filter:brightness(0) invert(1)}
 .nav-logo-text{font-family:var(--fd);font-weight:800;font-size:20px;color:var(--red);transition:color var(--t)}
 .nav-logo-text span{color:var(--tx1)}
 .nav-links{display:flex;align-items:center;gap:2px}
@@ -325,6 +327,7 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
 .kb-name{font-weight:700;font-size:13px;margin-bottom:2px;color:var(--tx1)}.kb-sub{font-size:11px;color:var(--tx4)}
 .kb-obs{font-size:11px;color:var(--tx3);font-style:italic;margin-top:6px;border-top:1px solid var(--border);padding-top:6px;line-height:1.5}
 .kb-acts{display:flex;gap:5px;margin-top:9px;flex-wrap:wrap}
+.kb-btn-analise{background:var(--yellow-bg);color:var(--yellow-tx);border:1.5px solid rgba(180,130,20,.25)}.kb-btn-analise:hover:not(:disabled){background:#fde68a;border-color:rgba(180,130,20,.5)}.kb-btn-analise:disabled{opacity:.35;cursor:not-allowed}
 
 /* ══════════════════════════════════════════════
    STATS
@@ -590,7 +593,7 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
 <nav class="navbar">
   <div class="nav-inner">
     <div class="nav-logo" onclick="goHome()">
-      <div class="nav-logo-box">VF</div>
+      <div class="nav-logo-box"><img src="src/img/logo.png" alt="VagasFatec Logo" draggable="false"></div>
       <div class="nav-logo-text">Vagas<span>Fatec</span></div>
     </div>
 
@@ -1544,7 +1547,7 @@ function toggleDark() {
 })();
 
 /* ─────────────── ESTADO GLOBAL ─────────────── */
-const BASE = 'https://apivagas.voluntariosdasaude.com.br';
+const BASE = 'http://localhost:8080';
 let token      = null;
 let role       = null;   // 'ROLE_CANDIDATO' | 'ROLE_EMPRESA'
 let userId     = null;
@@ -2233,7 +2236,7 @@ async function loadCandidaturas() {
 
     tbody.innerHTML = list.map(c => {
       const s = c.status || 'ENVIADO';
-      const finalSt = ['APROVADO', 'REJEITADO', 'DESISTIU'].includes(s);
+      const finalSt = ['REJEITADO', 'DESISTIU'].includes(s);
       const canDesist = !finalSt;
 
       // Botão de observação (só aparece se existir observação)
@@ -2255,7 +2258,7 @@ async function loadCandidaturas() {
           <td class="tbl-acts">
             ${obsButton}
             <button class="btn btn-g btn-sm"
-              ${!canDesist ? 'disabled title="Processo finalizado ou vaga encerrada"' : ''}
+              ${!canDesist ? `disabled title="${s === 'REJEITADO' ? 'Sua candidatura foi encerrada pela empresa. Não é possível desistir.' : 'Você já desistiu desta candidatura.'}"` : 'title="Desistir do processo seletivo desta vaga. Esta ação é irreversível."'}
               onclick="confirmDesist(${c.vagaId})">Desistir</button>
           </td>
         </tr>
@@ -2583,7 +2586,7 @@ async function loadKanban() {
     board.innerHTML = cols.map(col => {
       const items = list.filter(c => c.status === col.key);
       const cards = items.map(c => {
-        // Regra de negócio: botões de aprovar/rejeitar ficam congelados se status já final
+        // Regra de negócio: botões ficam congelados se status já final
         const final = col.key === 'APROVADO' || col.key === 'REJEITADO';
         return `<div class="kb-card">
           <div class="kb-name">${esc(c.empresaNome || 'Candidato #' + c.candidatoId)}</div>
@@ -2596,8 +2599,9 @@ async function loadKanban() {
             <button class="btn btn-s btn-sm" onclick="verPerfilCandidato(${c.candidatoId})">👤 Perfil</button>
             <button class="btn btn-g btn-sm" onclick="openObs(${c.id}, '${esc(c.empresaNome||'').replace(/'/g,"\\'")}')">📝 Obs.</button>
             <!-- PATCH /api/candidaturas/empresa/candidatura/{id}/novo_status?status=X -->
-            <button class="btn btn-ok btn-sm" ${final?'disabled title="Status já finalizado"':''} onclick="doStatus(${c.id},'APROVADO')">✅</button>
-            <button class="btn btn-danger btn-sm" ${final?'disabled title="Status já finalizado"':''} onclick="doStatus(${c.id},'REJEITADO')">❌</button>
+            <button class="btn btn-sm kb-btn-analise" ${final?'disabled title="Este candidato já teve seu processo encerrado e não pode ser movido."':''} onclick="doStatus(${c.id},'EM_ANALISE')" title="Mover para Em Análise: o candidato será notificado de que está sendo avaliado.">🔍</button>
+            <button class="btn btn-ok btn-sm" ${final?'disabled title="Este candidato já teve seu processo encerrado e não pode ser movido."':''} onclick="doStatus(${c.id},'APROVADO')" title="Aprovar para entrevista: o candidato será convocado para a próxima etapa do processo seletivo. Isso não representa uma contratação definitiva.">✅</button>
+            <button class="btn btn-danger btn-sm" ${final?'disabled title="Este candidato já teve seu processo encerrado e não pode ser movido."':''} onclick="doStatus(${c.id},'REJEITADO')" title="Não aprovado nesta vaga: o candidato será direcionado ao banco de talentos e poderá ser considerado em oportunidades futuras.">❌</button>
           </div>
         </div>`;
       }).join('') || `<div class="text-muted text-sm text-center" style="padding:16px 8px">Vazio</div>`;
