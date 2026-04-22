@@ -1406,6 +1406,89 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
   </div>
 </div>
 
+<!-- Modal: Confirmação de Candidatura -->
+<div class="overlay hidden" id="mConfirmCand">
+  <div class="modal" style="max-width:560px">
+    <div class="mh">
+      <div>
+        <div class="mt">Confirmar Candidatura</div>
+        <div class="text-muted text-sm mt-1">Verifique seus dados antes de se candidatar</div>
+      </div>
+      <button class="mx" onclick="closeModal('mConfirmCand')">✕</button>
+    </div>
+
+    <!-- Cabeçalho do candidato -->
+    <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--red-muted);border-radius:var(--r10);margin-bottom:18px;border:1px solid rgba(155,27,27,.12)">
+      <div style="width:48px;height:48px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--fd);font-weight:800;font-size:18px;flex-shrink:0" id="ccAvatar">?</div>
+      <div>
+        <div style="font-family:var(--fd);font-weight:700;font-size:16px;color:var(--tx1)" id="ccNome">—</div>
+        <div style="font-size:12px;color:var(--tx3);margin-top:2px" id="ccEmail">—</div>
+        <div style="font-size:11px;color:var(--red);font-weight:700;margin-top:1px" id="ccRA">—</div>
+      </div>
+    </div>
+
+    <!-- Grid de dados -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px">
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r10);padding:12px 14px">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tx4);margin-bottom:4px">Telefone</div>
+        <div style="font-size:13px;font-weight:600;color:var(--tx1)" id="ccTel">—</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r10);padding:12px 14px">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tx4);margin-bottom:4px">Cidade</div>
+        <div style="font-size:13px;font-weight:600;color:var(--tx1)" id="ccCidade">—</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r10);padding:12px 14px">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tx4);margin-bottom:4px">Data de Nascimento</div>
+        <div style="font-size:13px;font-weight:600;color:var(--tx1)" id="ccNasc">—</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r10);padding:12px 14px">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tx4);margin-bottom:4px">LinkedIn</div>
+        <div style="font-size:13px;font-weight:600;color:var(--tx1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="ccLinkedin">—</div>
+      </div>
+    </div>
+
+    <!-- Currículo -->
+    <div style="background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r10);padding:13px 16px;margin-bottom:18px;display:flex;align-items:center;gap:12px">
+      <div style="font-size:22px;flex-shrink:0" id="ccCurrIco">📄</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tx4);margin-bottom:3px">Currículo</div>
+        <div style="font-size:13px;font-weight:600;color:var(--tx1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="ccCurrNome">Nenhum currículo enviado</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <button id="ccCurrViewBtn" class="btn btn-s btn-sm hidden" onclick="viewCurriculo()" title="Visualizar currículo em nova aba">
+           Visualizar
+        </button>
+        <div id="ccCurrWarn" class="hidden" style="font-size:11px;font-weight:700;color:var(--yellow-tx);background:var(--yellow-bg);border-radius:var(--r6);padding:4px 9px;border:1px solid rgba(252,211,77,.3)">⚠️ Sem currículo</div>
+      </div>
+    </div>
+
+    <!-- Vaga alvo -->
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r10);padding:12px 16px;margin-bottom:4px;display:flex;align-items:center;gap:10px">
+      <div style="font-size:18px;flex-shrink:0"></div>
+      <div style="flex:1">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tx4);margin-bottom:3px">Vaga selecionada</div>
+        <div style="font-size:13px;font-weight:700;color:var(--tx1)" id="ccVagaTitulo">—</div>
+        <div style="font-size:12px;color:var(--tx3)" id="ccVagaEmpresa">—</div>
+      </div>
+    </div>
+
+    <!-- Aviso de dados incorretos -->
+    <div style="font-size:12px;color:var(--tx3);text-align:center;margin-top:14px;line-height:1.55">
+      Os dados acima estão incorretos?
+      <span class="link" onclick="closeModal('mConfirmCand');closeModal('mVaga');dashTab('perfil')">Editar meu perfil</span>
+      ou
+      <span class="link" onclick="closeModal('mConfirmCand');closeModal('mVaga');dashTab('curriculo')">Atualizar currículo</span>
+    </div>
+
+    <div class="mf">
+      <button class="btn btn-g" onclick="closeModal('mConfirmCand')">Cancelar</button>
+      <button class="btn btn-p" id="ccConfirmBtn" onclick="doConfirmarCandidatura()">
+         Confirmar e Candidatar-se
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- Modal: Criar / Editar Vaga -->
 <div class="overlay hidden" id="mNovaVaga">
   <div class="modal" style="max-width:620px">
@@ -1818,15 +1901,52 @@ function openVagaDetail(id) {
   openModal('mVaga');
 }
 
-/* POST /api/candidaturas/vaga/{id_vaga} */
+/* Abre o modal de confirmação de candidatura com dados do candidato */
 async function doCandidatar() {
   const btn = document.getElementById('btnCandidatar');
   setLoad(btn, true);
   try {
+    const c = await req('GET', '/api/candidatos/perfil');
+
+    // Preenche cabeçalho
+    const ini = initials(c.nomeCompleto);
+    document.getElementById('ccAvatar').textContent      = ini;
+    set('ccNome',   c.nomeCompleto   || '—');
+    set('ccEmail',  c.emailCandidato || '—');
+    set('ccRA',     c.raAluno ? `RA: ${c.raAluno}` : '—');
+
+    // Preenche dados
+    set('ccTel',     c.telefone       || 'Não informado');
+    set('ccCidade',  c.cidade         || 'Não informada');
+    set('ccNasc',    c.dataNascimento ? fmtDate(c.dataNascimento) : 'Não informada');
+    set('ccLinkedin',c.linkLinkedin   || 'Não informado');
+
+    // Currículo
+    const hasCurr = !!c.nomeCurriculo;
+    set('ccCurrNome', hasCurr ? c.nomeCurriculo : 'Nenhum currículo enviado');
+    document.getElementById('ccCurrIco').textContent = hasCurr ? '📄' : '❌';
+    document.getElementById('ccCurrWarn').classList.toggle('hidden', hasCurr);
+    document.getElementById('ccCurrViewBtn').classList.toggle('hidden', !hasCurr);
+
+    // Vaga alvo
+    const vaga = [...vagasCache, ...dvCache].find(x => x.id === selVagaId);
+    set('ccVagaTitulo',  vaga?.tituloVaga  || '—');
+    set('ccVagaEmpresa', vaga?.nomeEmpresa || '—');
+
+    openModal('mConfirmCand');
+  } catch(e) { apiErr(e); }
+  finally { setLoad(btn, false); }
+}
+
+/* POST /api/candidaturas/vaga/{id_vaga} — chamado após confirmação */
+async function doConfirmarCandidatura() {
+  const btn = document.getElementById('ccConfirmBtn');
+  setLoad(btn, true);
+  try {
     await req('POST', `/api/candidaturas/vaga/${selVagaId}`);
+    closeModal('mConfirmCand');
     closeModal('mVaga');
     toast('ok', 'Candidatura enviada!', 'Boa sorte no processo seletivo!');
-    // Recarrega candidaturas se estiver na aba
     if (!document.getElementById('dt-candidaturas').classList.contains('hidden')) loadCandidaturas();
   } catch(e) { apiErr(e); }
   finally { setLoad(btn, false); }
