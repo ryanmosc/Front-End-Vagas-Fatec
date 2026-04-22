@@ -141,6 +141,24 @@ html.dark .nav-logo-box img{filter:brightness(0) invert(1)}
 .fta{resize:vertical;min-height:80px}
 .ferr{font-size:12px;color:var(--rose-tx);font-weight:500;padding:9px 13px;background:var(--rose-bg);border-radius:var(--r6);border:1px solid rgba(248,113,113,.3)}
 .fhint{font-size:12px;color:var(--tx4)}
+
+/* ══════════════════════════════════════════════
+   TERMO DE RESPONSABILIDADE
+   ══════════════════════════════════════════════ */
+.termo-box{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r10);padding:14px 16px;max-height:120px;overflow-y:auto;font-size:11.5px;color:var(--tx3);line-height:1.65;margin-bottom:4px}
+.termo-box::-webkit-scrollbar{width:4px}
+.termo-box::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.termo-check-row{display:flex;align-items:flex-start;gap:10px;cursor:pointer;padding:2px 0}
+.termo-check-row input[type=checkbox]{width:16px;height:16px;accent-color:var(--red);cursor:pointer;flex-shrink:0;margin-top:2px}
+.termo-check-label{font-size:12.5px;color:var(--tx2);line-height:1.5;font-weight:500;cursor:pointer}
+.termo-check-label a{color:var(--red);font-weight:700;text-decoration:none}.termo-check-label a:hover{text-decoration:underline}
+
+/* ══════════════════════════════════════════════
+   RODAPÉ
+   ══════════════════════════════════════════════ */
+.site-footer{background:var(--surface);border-top:1px solid var(--border);padding:18px 24px;text-align:center;font-size:12px;color:var(--tx4);transition:background var(--t),border-color var(--t)}
+.site-footer a{color:var(--red);font-weight:600;text-decoration:none}.site-footer a:hover{text-decoration:underline}
+.site-footer-inner{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}
 .frow{display:grid;gap:16px;grid-template-columns:1fr 1fr}
 .fstack{display:flex;flex-direction:column;gap:16px}
 .char-c{font-size:12px;color:var(--tx4);text-align:right}.char-c.warn{color:var(--red-light)}
@@ -826,6 +844,24 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
          data-expired-callback="onRegCandCaptchaExpired"></div>
   </div>
 
+  <!-- Termo de Responsabilidade -->
+  <div class="fg" style="gap:8px">
+    <div class="termo-box">
+      <strong>Termo de Responsabilidade e Uso de Dados</strong><br><br>
+      Ao se cadastrar na plataforma VagasFatec, o usuário declara estar ciente e de acordo com os seguintes termos:<br><br>
+      <strong>1. Veracidade das informações:</strong> O usuário é o único responsável pela veracidade, exatidão e atualidade de todos os dados pessoais, acadêmicos e profissionais fornecidos durante o cadastro e ao longo do uso da plataforma. O VagasFatec não se responsabiliza por informações falsas, incompletas ou desatualizadas inseridas pelo usuário.<br><br>
+      <strong>2. Isenção de responsabilidade:</strong> O VagasFatec atua exclusivamente como intermediário entre candidatos e empresas, não sendo parte nas relações de trabalho, estágio ou contratação estabelecidas. A plataforma não se responsabiliza por eventuais prejuízos, perdas ou danos decorrentes do uso das informações disponibilizadas, nem por decisões tomadas por empresas com base nos dados fornecidos pelo usuário.<br><br>
+      <strong>3. Uso dos dados:</strong> Os dados cadastrados serão utilizados exclusivamente para fins de intermediação de oportunidades profissionais dentro do ecossistema Fatec, em conformidade com a Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018). O usuário consente com o tratamento dos seus dados para as finalidades descritas neste termo.<br><br>
+      <strong>4. Responsabilidade pelo acesso:</strong> O usuário é responsável pela guarda e sigilo de suas credenciais de acesso (login e senha). Qualquer atividade realizada com as suas credenciais é de sua inteira responsabilidade.<br><br>
+      <strong>5. Conteúdo e conduta:</strong> É vedado o cadastro de informações que violem direitos de terceiros, contenham dados falsos ou que infrinjam quaisquer dispositivos legais. O VagasFatec reserva-se o direito de remover cadastros que descumpram estas condições, sem aviso prévio.<br><br>
+      Ao clicar em "Criar minha conta", o usuário confirma ter lido, compreendido e aceito integralmente os termos acima.
+    </div>
+    <label class="termo-check-row">
+      <input type="checkbox" id="rcTermos">
+      <span class="termo-check-label">Li e concordo com o <a href="javascript:void(0)">Termo de Responsabilidade e Uso de Dados</a>. Declaro que as informações fornecidas são verdadeiras e de minha inteira responsabilidade.</span>
+    </label>
+  </div>
+
   <div id="rcErr" class="ferr hidden"></div>
   <button class="btn btn-p w-full" id="rcBtn" onclick="doRegCand()">Criar minha conta</button>
 </div>
@@ -924,6 +960,24 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
               <input type="password" class="fi" id="reSenha2" placeholder="Repita a senha">
             </div>
           </div>
+          <!-- Termo de Responsabilidade -->
+          <div class="fg" style="gap:8px">
+            <div class="termo-box">
+              <strong>Termo de Responsabilidade e Uso de Dados</strong><br><br>
+              Ao se cadastrar na plataforma VagasFatec, a empresa declara estar ciente e de acordo com os seguintes termos:<br><br>
+              <strong>1. Veracidade das informações:</strong> A empresa é a única responsável pela veracidade, exatidão e atualidade de todos os dados institucionais fornecidos durante o cadastro e ao longo do uso da plataforma. O VagasFatec não se responsabiliza por informações falsas, incompletas ou desatualizadas inseridas pela empresa.<br><br>
+              <strong>2. Isenção de responsabilidade:</strong> O VagasFatec atua exclusivamente como intermediário entre empresas e candidatos, não sendo parte nas relações de trabalho, estágio ou contratação estabelecidas. A plataforma não se responsabiliza por quaisquer prejuízos, perdas ou danos decorrentes de contratações, processos seletivos ou decisões tomadas com base nas informações disponíveis na plataforma.<br><br>
+              <strong>3. Uso dos dados:</strong> Os dados cadastrados serão utilizados exclusivamente para fins de intermediação de oportunidades profissionais dentro do ecossistema Fatec, em conformidade com a Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018). A empresa consente com o tratamento dos seus dados para as finalidades descritas neste termo.<br><br>
+              <strong>4. Publicação de vagas:</strong> A empresa é inteiramente responsável pelo conteúdo das vagas publicadas, incluindo requisitos, remuneração e condições de trabalho. É vedada a publicação de vagas que violem a legislação trabalhista vigente, configurem discriminação ou induzam candidatos a erro.<br><br>
+              <strong>5. Responsabilidade pelo acesso:</strong> A empresa é responsável pela guarda e sigilo das credenciais de acesso. Qualquer atividade realizada com as suas credenciais é de inteira responsabilidade da empresa.<br><br>
+              Ao clicar em "Cadastrar empresa", a empresa confirma ter lido, compreendido e aceito integralmente os termos acima.
+            </div>
+            <label class="termo-check-row">
+              <input type="checkbox" id="reTermos">
+              <span class="termo-check-label">Li e concordo com o <a href="javascript:void(0)">Termo de Responsabilidade e Uso de Dados</a>. Declaro que as informações fornecidas são verdadeiras e de responsabilidade da empresa.</span>
+            </label>
+          </div>
+
           <div id="reErr" class="ferr hidden"></div>
           <button class="btn btn-p w-full" id="reBtn" onclick="doRegEmp()">Cadastrar empresa</button>
         </div>
@@ -1526,6 +1580,16 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
 <!-- ════════════════════════════════════════════
      JAVASCRIPT
      ════════════════════════════════════════════ -->
+<!-- RODAPÉ -->
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <span>© 2025 VagasFatec — Desenvolvido por</span>
+    <a href="https://www.linkedin.com/in/ryan-moscardini/" target="_blank" rel="noopener noreferrer">Ryan Moscardini</a>
+    <span style="color:var(--border2)">·</span>
+    <a href="https://github.com/ryanmosc" target="_blank" rel="noopener noreferrer">github.com/ryanmosc</a>
+  </div>
+</footer>
+
 <script>
 /* ─────────────── DARK MODE ─────────────── */
 function toggleDark() {
@@ -1870,6 +1934,10 @@ async function doRegCand() {
     showErr('rcErr', 'Por favor, marque o reCAPTCHA "Não sou um robô".');
     return;
   }
+  if (!document.getElementById('rcTermos')?.checked) {
+    showErr('rcErr', 'Você precisa aceitar o Termo de Responsabilidade para continuar.');
+    return;
+  }
 
   const btn = document.getElementById('rcBtn');
   setLoad(btn, true);
@@ -1999,6 +2067,8 @@ async function doRegEmp() {
     { showErr('reErr', 'Preencha todos os campos obrigatórios.'); return; }
   if (senha !== senha2)
     { showErr('reErr', 'As senhas não coincidem.'); return; }
+  if (!document.getElementById('reTermos')?.checked)
+    { showErr('reErr', 'Você precisa aceitar o Termo de Responsabilidade para continuar.'); return; }
 
   const btn = document.getElementById('reBtn');
   setLoad(btn, true);
