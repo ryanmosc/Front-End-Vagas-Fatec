@@ -2092,6 +2092,7 @@ async function setupCandSidebar() {
     // Pré-preenche perfil
     set('pfAv', ini); set('pfNome', c.nomeCompleto);
     set('pfEmail', c.emailCandidato); set('pfRA', `RA: ${c.raAluno}`);
+    set('pGithub', c.github); 
     fillPerfil(c);
     // Currículo
     if (c.nomeCurriculo) {
@@ -2391,12 +2392,12 @@ async function loadPerfil() {
 }
 
 function fillPerfil(c) {
-  if (c.telefone)      document.getElementById('pfTel').value     = c.telefone;
-  if (c.dataNascimento)document.getElementById('pfNasc').value    = c.dataNascimento;
-  if (c.cidade)        document.getElementById('pfCidade').value  = c.cidade;
-  if (c.linkedin)  document.getElementById('pfLinkedin').value= c.linkedin;
-  if (c.github)    document.getElementById('pfGithub').value  = c.github;
-  if (c.bioCandidato)  document.getElementById('pfBio').value     = c.bioCandidato;
+  if (c.telefone)       document.getElementById('pfTel').value      = c.telefone;
+  if (c.dataNascimento) document.getElementById('pfNasc').value     = c.dataNascimento;
+  if (c.cidade)         document.getElementById('pfCidade').value   = c.cidade;
+  if (c.linkLinkedin)   document.getElementById('pfLinkedin').value = c.linkLinkedin; // ← corrigido
+  if (c.linkGithub)     document.getElementById('pfGithub').value   = c.linkGithub;   // ← corrigido
+  if (c.bioCandidato)   document.getElementById('pfBio').value      = c.bioCandidato;
 }
 
 /* PATCH /api/candidatos/perfil  body: CandidatoAtualizarPerfilDTo */
