@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  bd:
+    image: postgres:16
+    container_name: bd-vagas-fatec
+    env_file:
+      - .env
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - backendfatec
+    restart: unless-stopped
+
+  api:
+    image: ryanmosc/backend-vagas-fatec:6
+    container_name: backend-vagas-fatec
+    env_file:
+      - .env
+    depends_on:
+      - bd
+    networks:
+      - backendfatec
+      - proxy-network
+    restart: unless-stopped
+
+  frontend:
+    image: ryanmosc/frontend-vagas-fatec:6
+    container_name: frontend-vagas-fatec
+    networks:
+      - backendfatec
+      - proxy-network
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+
+networks:
+  backendfatec:
+    driver: bridge
+
+  proxy-network:
+    external: true

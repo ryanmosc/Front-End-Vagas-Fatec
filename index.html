@@ -1448,7 +1448,7 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
         <div class="fg">
           <label class="fl">Curso Alvo</label>
           <select class="fs" id="mvCursoInput">
-            <option value="">Todos</option>
+            <option value="TODOS">Todos os Cursos</option>
             <option value="ADS">ADS</option>
             <option value="GRH">GRH</option>
             <option value="GPI">GPI</option>
@@ -2533,12 +2533,18 @@ function openVagaModal(vagaJson) {
   editVagaId = null;
   // Reset campos
   ['mvTituloInput','mvDesc2','mvCidadeInput'].forEach(id => { document.getElementById(id).value = ''; });
-  ['mvTipo','mvModalidade','mvCursoInput'].forEach(id => { document.getElementById(id).value = ''; });
+  ['mvTipo','mvModalidade'].forEach(id => { document.getElementById(id).value = ''; });
+  document.getElementById('mvCursoInput').value = 'TODOS';
   document.getElementById('mvBolsaInput').value = '';
   document.getElementById('mvEnc').value = '';
   document.getElementById('mvErr').classList.add('hidden');
   document.getElementById('mVagaTitle').textContent = 'Publicar Nova Vaga';
   document.getElementById('mvSubmit').textContent   = 'Publicar Vaga';
+
+  // Define data mínima como hoje (não permite datas passadas)
+  const hoje = new Date();
+  hoje.setMinutes(hoje.getMinutes() - hoje.getTimezoneOffset());
+  document.getElementById('mvEnc').min = hoje.toISOString().slice(0, 16);
 
   if (vagaJson) {
     try {
@@ -2548,7 +2554,7 @@ function openVagaModal(vagaJson) {
       document.getElementById('mvDesc2').value        = v.descricaoVaga || '';
       document.getElementById('mvTipo').value         = v.tipoVaga      || '';
       document.getElementById('mvModalidade').value   = v.modalidadeVaga|| '';
-      document.getElementById('mvCursoInput').value   = v.cursoVaga     || '';
+      document.getElementById('mvCursoInput').value   = v.cursoVaga || 'TODOS';
       document.getElementById('mvCidadeInput').value  = v.cidadeVaga    || '';
       document.getElementById('mvBolsaInput').value   = v.bolsaAuxilio  || '';
       document.getElementById('mvEnc').value          = v.dataEncerramento ? v.dataEncerramento.slice(0,16) : '';
@@ -2576,12 +2582,17 @@ async function doSaveVaga() {
   if (!titulo || !descricao || !tipoVaga || !modalidade || !cidade || !bolsa || !enc)
     { showErr('mvErr', 'Preencha todos os campos obrigatórios.'); return; }
 
+  // Valida se a data de encerramento não é anterior a agora
+  const dataEnc = new Date(enc);
+  if (dataEnc <= new Date())
+    { showErr('mvErr', 'A data de encerramento deve ser superior à data e hora atuais.'); return; }
+
   const body = {
     tituloVaga:       titulo,
     descricaoVaga:    descricao,
     tipoVaga:         tipoVaga,
     modalidadeVaga:   modalidade,
-    cursoVaga:        curso || null,
+    cursoVaga:        curso || 'TODOS',
     cidadeVaga:       cidade,
     bolsaAuxilio:     parseFloat(bolsa),
     dataEncerramento: enc + ':00'
