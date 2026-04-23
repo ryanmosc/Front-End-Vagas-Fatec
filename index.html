@@ -552,6 +552,55 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
   .nav-logo-text{display:none} /* só mostra o ícone VF */
 }
 
+/* ══════════════════════════════════════════════
+   MODAL CONFIRMAÇÃO DE CANDIDATURA — Responsivo
+   ══════════════════════════════════════════════ */
+.modal-cand-confirm{padding:28px 28px}
+
+/* Vaga alvo */
+.cc-vaga-box{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r10);margin-bottom:14px;min-width:0}
+.cc-vaga-box > div{min-width:0}
+.cc-vaga-titulo{font-size:14px;font-weight:700;color:var(--tx1);word-break:break-word;overflow-wrap:break-word;white-space:normal;line-height:1.35}
+.cc-vaga-ico{font-size:22px;flex-shrink:0}
+
+/* Cabeçalho do candidato */
+.cc-cand-hdr{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--red-muted);border-radius:var(--r10);margin-bottom:16px;border:1px solid rgba(155,27,27,.12)}
+.cc-avatar{width:48px;height:48px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--fd);font-weight:800;font-size:18px;flex-shrink:0}
+.cc-nome{font-family:var(--fd);font-weight:700;font-size:16px;color:var(--tx1)}
+.cc-email{font-size:12px;color:var(--tx3);margin-top:2px}
+.cc-ra{font-size:11px;color:var(--red);font-weight:700;margin-top:1px}
+
+/* Grid de dados — 2 colunas no desktop, 1 no mobile */
+.cc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.cc-full{grid-column:span 2}
+.cc-item{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r10);padding:11px 13px}
+.cc-lbl{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tx4);margin-bottom:4px}
+.cc-val{font-size:13px;font-weight:600;color:var(--tx1)}
+.cc-truncate{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* Currículo */
+.cc-curr-box{display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r10);margin-bottom:16px;flex-wrap:wrap}
+.cc-curr-ico{font-size:22px;flex-shrink:0}
+.cc-curr-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:auto}
+.cc-no-curr{font-size:11px;font-weight:700;color:var(--yellow-tx);background:var(--yellow-bg);border-radius:var(--r6);padding:4px 9px;border:1px solid rgba(252,211,77,.3)}
+
+/* Dica de edição */
+.cc-hint{font-size:12px;color:var(--tx3);text-align:center;margin-bottom:4px;line-height:1.6}
+
+/* Mobile: tudo em pilha */
+@media(max-width:520px){
+  .modal-cand-confirm{padding:20px 16px}
+  .cc-grid{grid-template-columns:1fr}
+  .cc-full{grid-column:span 1}
+  .cc-cand-hdr{flex-direction:column;text-align:center;gap:10px}
+  .cc-cand-hdr > div:last-child{text-align:center}
+  .cc-curr-box{flex-direction:column;align-items:flex-start;gap:8px}
+  .cc-curr-actions{margin-left:0;width:100%}
+  .cc-curr-actions .btn{width:100%;justify-content:center}
+  .cc-no-curr{width:100%;text-align:center}
+  .cc-vaga-box{flex-direction:column;align-items:flex-start;gap:8px}
+}
+
 /* ── Menu mobile hamburguer (navbar tabs visíveis como bottom bar) ── */
 /* Barra de navegação inferior no mobile para dashboards */
 .mobile-nav-bar{
@@ -1158,7 +1207,7 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
                 <div class="ufile-size">Currículo cadastrado</div>
               </div>
               <!-- GET /api/candidatos/perfil/curriculo/visualizar -->
-              <button class="btn btn-s btn-sm" onclick="viewCurriculo()">👁 Visualizar</button>
+              <button class="btn btn-s btn-sm" onclick="viewCurriculo()">Visualizar</button>
             </div>
           </div>
         </div>
@@ -1295,7 +1344,7 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
         <div id="epContent" class="hidden">
           <!-- Cabeçalho igual ao do candidato -->
           <div class="pfhdr">
-            <div style="width:68px;height:68px;background:var(--gray-800);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--fd);font-weight:800;font-size:26px;flex-shrink:0" id="epAvatar">?</div>
+            <div style="width:68px;height:68px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--fd);font-weight:800;font-size:26px;flex-shrink:0" id="epAvatar">?</div>
             <div>
               <div class="pfname" id="epNomeTopo">—</div>
               <div class="pfmeta" id="epRazaoTopo">—</div>
@@ -1393,8 +1442,8 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
       <button class="mx" onclick="closeModal('mVaga')">✕</button>
     </div>
     <div id="mvTags" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px"></div>
-    <div style="background:var(--gray-50);border-radius:var(--r6);padding:13px;margin-bottom:14px">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div style="background:var(--surface2);border-radius:var(--r6);border:1px solid var(--border);padding:13px;margin-bottom:14px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px">
         <div><div class="text-xs text-muted">Cidade</div><div style="font-weight:600;font-size:13px" id="mvCidade">—</div></div>
         <div><div class="text-xs text-muted">Bolsa/Salário</div><div style="font-weight:700;color:var(--green);font-size:14px" id="mvBolsa">—</div></div>
         <div><div class="text-xs text-muted">Encerra em</div><div style="font-weight:600;font-size:13px" id="mvData">—</div></div>
@@ -1413,7 +1462,7 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
 
 <!-- Modal: Confirmação de Candidatura -->
 <div class="overlay hidden" id="mConfirmCand">
-  <div class="modal" style="max-width:560px">
+  <div class="modal modal-cand-confirm" style="max-width:580px">
     <div class="mh">
       <div>
         <div class="mt">Confirmar Candidatura</div>
@@ -1422,77 +1471,75 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
       <button class="mx" onclick="closeModal('mConfirmCand')">✕</button>
     </div>
 
-    <!-- Cabeçalho do candidato -->
-    <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--red-muted);border-radius:var(--r10);margin-bottom:18px;border:1px solid rgba(155,27,27,.12)">
-      <div style="width:48px;height:48px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--fd);font-weight:800;font-size:18px;flex-shrink:0" id="ccAvatar">?</div>
-      <div>
-        <div style="font-family:var(--fd);font-weight:700;font-size:16px;color:var(--tx1)" id="ccNome">—</div>
-        <div style="font-size:12px;color:var(--tx3);margin-top:2px" id="ccEmail">—</div>
-        <div style="font-size:11px;color:var(--red);font-weight:700;margin-top:1px" id="ccRA">—</div>
+    <!-- Vaga alvo — destaque no topo -->
+    <div class="cc-vaga-box">
+      <!--<div class="cc-vaga-ico">💼</div> -->
+      <div style="flex:1;min-width:0">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tx4);margin-bottom:3px">Vaga selecionada</div>
+        <div class="cc-vaga-titulo" id="ccVagaTitulo">—</div>
+        <div style="font-size:12px;color:var(--tx3);margin-top:2px" id="ccVagaEmpresa">—</div>
       </div>
     </div>
 
-    <!-- Grid de dados -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px">
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r10);padding:12px 14px">
-        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tx4);margin-bottom:4px">Telefone</div>
-        <div style="font-size:13px;font-weight:600;color:var(--tx1)" id="ccTel">—</div>
+    <!-- Cabeçalho do candidato -->
+    <div class="cc-cand-hdr">
+      <div class="cc-avatar" id="ccAvatar">?</div>
+      <div style="min-width:0">
+        <div class="cc-nome" id="ccNome">—</div>
+        <div class="cc-email" id="ccEmail">—</div>
+        <div class="cc-ra" id="ccRA">—</div>
       </div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r10);padding:12px 14px">
-        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tx4);margin-bottom:4px">Cidade</div>
-        <div style="font-size:13px;font-weight:600;color:var(--tx1)" id="ccCidade">—</div>
+    </div>
+
+    <!-- Grid de dados — vira pilha no mobile -->
+    <div class="cc-grid">
+      <div class="cc-item">
+        <div class="cc-lbl">Telefone</div>
+        <div class="cc-val" id="ccTel">—</div>
       </div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r10);padding:12px 14px">
-        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tx4);margin-bottom:4px">Data de Nascimento</div>
-        <div style="font-size:13px;font-weight:600;color:var(--tx1)" id="ccNasc">—</div>
+      <div class="cc-item">
+        <div class="cc-lbl">Cidade</div>
+        <div class="cc-val" id="ccCidade">—</div>
       </div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r10);padding:12px 14px">
-        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tx4);margin-bottom:4px">LinkedIn</div>
-        <div style="font-size:13px;font-weight:600;color:var(--tx1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="ccLinkedin">—</div>
+      <div class="cc-item">
+        <div class="cc-lbl">Data de Nascimento</div>
+        <div class="cc-val" id="ccNasc">—</div>
       </div>
-       <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r10);padding:12px 14px;grid-column:span 2">
-        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tx4);margin-bottom:4px">Portfólio</div>
-       <div style="font-size:13px;font-weight:600;color:var(--tx1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="ccPortifolio">—</div>
+      <div class="cc-item">
+        <div class="cc-lbl">LinkedIn</div>
+        <div class="cc-val cc-truncate" id="ccLinkedin">—</div>
+      </div>
+      <div class="cc-item cc-full">
+        <div class="cc-lbl">Portfólio</div>
+        <div class="cc-val cc-truncate" id="ccPortifolio">—</div>
       </div>
     </div>
 
     <!-- Currículo -->
-    <div style="background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r10);padding:13px 16px;margin-bottom:18px;display:flex;align-items:center;gap:12px">
-      <div style="font-size:22px;flex-shrink:0" id="ccCurrIco">📄</div>
+    <div class="cc-curr-box">
+      <div class="cc-curr-ico" id="ccCurrIco">📄</div>
       <div style="flex:1;min-width:0">
-        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tx4);margin-bottom:3px">Currículo</div>
-        <div style="font-size:13px;font-weight:600;color:var(--tx1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="ccCurrNome">Nenhum currículo enviado</div>
+        <div class="cc-lbl" style="margin-bottom:3px">Currículo</div>
+        <div class="cc-val cc-truncate" id="ccCurrNome">Nenhum currículo enviado</div>
       </div>
-      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
-        <button id="ccCurrViewBtn" class="btn btn-s btn-sm hidden" onclick="viewCurriculo()" title="Visualizar currículo em nova aba">
-           Visualizar
-        </button>
-        <div id="ccCurrWarn" class="hidden" style="font-size:11px;font-weight:700;color:var(--yellow-tx);background:var(--yellow-bg);border-radius:var(--r6);padding:4px 9px;border:1px solid rgba(252,211,77,.3)">⚠️ Sem currículo</div>
-      </div>
-    </div>
-
-    <!-- Vaga alvo -->
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r10);padding:12px 16px;margin-bottom:4px;display:flex;align-items:center;gap:10px">
-      <div style="font-size:18px;flex-shrink:0"></div>
-      <div style="flex:1">
-        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tx4);margin-bottom:3px">Vaga selecionada</div>
-        <div style="font-size:13px;font-weight:700;color:var(--tx1)" id="ccVagaTitulo">—</div>
-        <div style="font-size:12px;color:var(--tx3)" id="ccVagaEmpresa">—</div>
+      <div class="cc-curr-actions">
+        <button id="ccCurrViewBtn" class="btn btn-s btn-sm hidden" onclick="viewCurriculo()" title="Visualizar currículo em nova aba">Visualizar</button>
+        <div id="ccCurrWarn" class="hidden cc-no-curr">⚠️ Sem currículo</div>
       </div>
     </div>
 
     <!-- Aviso de dados incorretos -->
-    <div style="font-size:12px;color:var(--tx3);text-align:center;margin-top:14px;line-height:1.55">
-      Os dados acima estão incorretos?
-      <span class="link" onclick="closeModal('mConfirmCand');closeModal('mVaga');dashTab('perfil')">Editar meu perfil</span>
-      ou
+    <div class="cc-hint">
+      Os dados estão incorretos?
+      <span class="link" onclick="closeModal('mConfirmCand');closeModal('mVaga');dashTab('perfil')">Editar perfil</span>
+      ·
       <span class="link" onclick="closeModal('mConfirmCand');closeModal('mVaga');dashTab('curriculo')">Atualizar currículo</span>
     </div>
 
     <div class="mf">
       <button class="btn btn-g" onclick="closeModal('mConfirmCand')">Cancelar</button>
       <button class="btn btn-p" id="ccConfirmBtn" onclick="doConfirmarCandidatura()">
-         Confirmar e Candidatar-se
+        Confirmar e Candidatar-se
       </button>
     </div>
   </div>
@@ -1611,28 +1658,28 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
         <div class="frow">
           <div class="fg">
             <label class="fl">Telefone</label>
-            <p id="mpTel" class="fi" style="background:var(--gray-50);margin-bottom:0;border:1.5px solid var(--gray-200);pointer-events:none;">—</p>
+            <p id="mpTel" class="fi" style="background:var(--surface2);margin-bottom:0;border:1.5px solid var(--border);pointer-events:none;">—</p>
           </div>
           <div class="fg">
             <label class="fl">Cidade</label>
-            <p id="mpCidade" class="fi" style="background:var(--gray-50);margin-bottom:0;border:1.5px solid var(--gray-200);pointer-events:none;">—</p>
+            <p id="mpCidade" class="fi" style="background:var(--surface2);margin-bottom:0;border:1.5px solid var(--border);pointer-events:none;">—</p>
           </div>
         </div>
         <div class="fg">
           <label class="fl">LinkedIn</label>
-          <a id="mpLinkedin" href="#" target="_blank" class="fi" style="background:var(--gray-50);border:1.5px solid var(--gray-200);display:block;padding:10px 14px;text-decoration:none;color:var(--red);">—</a>
+          <a id="mpLinkedin" href="#" target="_blank" class="fi" style="background:var(--surface2);border:1.5px solid var(--border);display:block;padding:10px 14px;text-decoration:none;color:var(--red);">—</a>
         </div>
         <div class="fg">
           <label class="fl">GitHub</label>
-          <a id="mpGithub" href="#" target="_blank" class="fi" style="background:var(--gray-50);border:1.5px solid var(--gray-200);display:block;padding:10px 14px;text-decoration:none;color:var(--red);">—</a>
+          <a id="mpGithub" href="#" target="_blank" class="fi" style="background:var(--surface2);border:1.5px solid var(--border);display:block;padding:10px 14px;text-decoration:none;color:var(--red);">—</a>
         </div>
         <div class="fg">
           <label class="fl">Portfólio</label>
-          <a id="mpPortifolio" href="#" target="_blank" class="fi" style="background:var(--gray-50);border:1.5px solid var(--gray-200);display:block;padding:10px 14px;text-decoration:none;color:var(--red);">—</a>
+          <a id="mpPortifolio" href="#" target="_blank" class="fi" style="background:var(--surface2);border:1.5px solid var(--border);display:block;padding:10px 14px;text-decoration:none;color:var(--red);">—</a>
         </div>
         <div class="fg">
           <label class="fl">Bio / Sobre</label>
-          <div id="mpBio" style="background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:var(--r6);padding:14px;min-height:120px;line-height:1.5;font-size:13px;white-space:pre-wrap;overflow-y:auto;">—</div>
+          <div id="mpBio" style="background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r6);padding:14px;min-height:120px;line-height:1.5;font-size:13px;white-space:pre-wrap;overflow-y:auto;">—</div>
         </div>
       </div>
     </div>
@@ -1652,11 +1699,37 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
       </div>
       <button class="mx" onclick="closeModal('mObsCandidato')">✕</button>
     </div>
-    <div style="background:var(--gray-50); border-radius:var(--r12); padding:20px; min-height:140px; font-size:14.5px; line-height:1.65;" id="obsConteudo">
+    <div style="background:var(--surface2); border-radius:var(--r12); padding:20px; min-height:140px; font-size:14.5px; line-height:1.65;" id="obsConteudo">
       —
     </div>
     <div class="mf">
       <button class="btn btn-g" onclick="closeModal('mObsCandidato')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Detalhes da Vaga (para candidaturas) -->
+<div class="overlay hidden" id="mVagaCand">
+  <div class="modal" style="max-width:540px">
+    <div class="mh">
+      <div>
+        <div class="mt" id="mvc_titulo">—</div>
+        <div class="text-muted text-sm mt-1" id="mvc_empresa">—</div>
+      </div>
+      <button class="mx" onclick="closeModal('mVagaCand')">✕</button>
+    </div>
+    <div id="mvc_tags" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px"></div>
+    <div style="background:var(--surface2);border-radius:var(--r10);border:1px solid var(--border);padding:14px;margin-bottom:16px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div><div class="text-xs text-muted" style="margin-bottom:3px">Cidade</div><div style="font-weight:600;font-size:13px;color:var(--tx1)" id="mvc_cidade">—</div></div>
+        <div><div class="text-xs text-muted" style="margin-bottom:3px">Bolsa/Salário</div><div style="font-weight:700;color:var(--green);font-size:14px" id="mvc_bolsa">—</div></div>
+        <div><div class="text-xs text-muted" style="margin-bottom:3px">Encerramento</div><div style="font-weight:600;font-size:13px;color:var(--tx1)" id="mvc_data">—</div></div>
+        <div><div class="text-xs text-muted" style="margin-bottom:3px">Curso Alvo</div><div style="font-weight:600;font-size:13px;color:var(--tx1)" id="mvc_curso">—</div></div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:var(--tx2);line-height:1.7;background:var(--surface2);border-radius:var(--r10);border:1px solid var(--border);padding:14px;max-height:220px;overflow-y:auto" id="mvc_desc">—</div>
+    <div class="mf">
+      <button class="btn btn-g" onclick="closeModal('mVagaCand')">Fechar</button>
     </div>
   </div>
 </div>
@@ -2460,6 +2533,7 @@ async function loadCandidaturas() {
           <td data-label="Inscrito em" class="text-muted" style="font-size:12px">${fmtDateTime(c.dataInscricao)}</td>
           <td data-label="Status"><span class="badge b-${s.toLowerCase()}">${stLabel(s)}</span></td>
           <td class="tbl-acts">
+            <button class="btn btn-s btn-sm" onclick="verVagaCandidatura(${c.vagaId})">🔍 Ver Vaga</button>
             ${obsButton}
             <button class="btn btn-g btn-sm"
               ${!canDesist ? `disabled title="${s === 'REJEITADO' ? 'Sua candidatura foi encerrada pela empresa. Não é possível desistir.' : 'Você já desistiu desta candidatura.'}"` : 'title="Desistir do processo seletivo desta vaga. Esta ação é irreversível."'}
@@ -2478,6 +2552,37 @@ function verObservacao(tituloVaga, observacao) {
   document.getElementById('obsVagaTitulo').textContent = tituloVaga;
   document.getElementById('obsConteudo').innerHTML = esc(observacao).replace(/\n/g, '<br>');
   openModal('mObsCandidato');
+}
+
+/* Abre o modal de detalhes de uma vaga a partir das candidaturas */
+async function verVagaCandidatura(vagaId) {
+  // Tenta encontrar nos caches primeiro
+  let v = [...vagasCache, ...dvCache].find(x => x.id === vagaId);
+  if (!v) {
+    try {
+      v = await req('GET', `/api/vagas/${vagaId}`);
+    } catch(e) {
+      // Se não tiver endpoint individual, busca todas e filtra
+      try {
+        const all = await req('GET', '/api/vagas') || [];
+        v = all.find(x => x.id === vagaId);
+      } catch {}
+    }
+  }
+  if (!v) { toast('wa', 'Não encontrado', 'Não foi possível carregar os detalhes da vaga.'); return; }
+
+  document.getElementById('mvc_titulo').textContent  = v.tituloVaga  || '—';
+  document.getElementById('mvc_empresa').textContent = v.nomeEmpresa || '—';
+  document.getElementById('mvc_cidade').textContent  = v.cidadeVaga  || '—';
+  document.getElementById('mvc_bolsa').textContent   = fmtBolsa(v.bolsaAuxilio);
+  document.getElementById('mvc_data').textContent    = fmtDate(v.dataEncerramento);
+  document.getElementById('mvc_curso').textContent   = v.cursoVaga   || 'Todos';
+  document.getElementById('mvc_desc').textContent    = v.descricaoVaga || '—';
+  document.getElementById('mvc_tags').innerHTML = `
+    <span class="badge b-${(v.tipoVaga||'').toLowerCase()}">${v.tipoVaga||''}</span>
+    <span class="badge b-${(v.modalidadeVaga||'').toLowerCase()}">${v.modalidadeVaga||''}</span>
+    ${v.statusVaga ? `<span class="badge b-${(v.statusVaga||'').toLowerCase()}">${v.statusVaga}</span>` : ''}`;
+  openModal('mVagaCand');
 }
 
 /* PATCH /api/candidaturas/vaga/{vagaId}/desistir */
