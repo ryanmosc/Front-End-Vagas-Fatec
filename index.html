@@ -1121,6 +1121,11 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
               <label class="fl">GitHub</label>
               <input type="url" class="fi" id="pfGithub" placeholder="https://github.com/usuario">
             </div>
+            <!-- ANTES do campo Bio, após o campo GitHub -->
+            <div class="fg">
+              <label class="fl">Portfólio</label>
+              <input type="url" class="fi" id="pfPortifolio" placeholder="https://meuportifolio.com">
+            </div>
             <div class="fg">
               <label class="fl">Bio</label>
               <textarea class="fta" id="pfBio" placeholder="Fale sobre você, suas habilidades e objetivos profissionais..."></textarea>
@@ -1445,6 +1450,10 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
         <div style="font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tx4);margin-bottom:4px">LinkedIn</div>
         <div style="font-size:13px;font-weight:600;color:var(--tx1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="ccLinkedin">—</div>
       </div>
+       <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r10);padding:12px 14px;grid-column:span 2">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tx4);margin-bottom:4px">Portfólio</div>
+       <div style="font-size:13px;font-weight:600;color:var(--tx1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="ccPortifolio">—</div>
+      </div>
     </div>
 
     <!-- Currículo -->
@@ -1616,6 +1625,10 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
         <div class="fg">
           <label class="fl">GitHub</label>
           <a id="mpGithub" href="#" target="_blank" class="fi" style="background:var(--gray-50);border:1.5px solid var(--gray-200);display:block;padding:10px 14px;text-decoration:none;color:var(--red);">—</a>
+        </div>
+        <div class="fg">
+          <label class="fl">Portfólio</label>
+          <a id="mpPortifolio" href="#" target="_blank" class="fi" style="background:var(--gray-50);border:1.5px solid var(--gray-200);display:block;padding:10px 14px;text-decoration:none;color:var(--red);">—</a>
         </div>
         <div class="fg">
           <label class="fl">Bio / Sobre</label>
@@ -1920,7 +1933,7 @@ async function doCandidatar() {
     set('ccCidade',  c.cidade         || 'Não informada');
     set('ccNasc',    c.dataNascimento ? fmtDate(c.dataNascimento) : 'Não informada');
     set('ccLinkedin',c.linkLinkedin   || 'Não informado');
-
+    set('ccPortifolio',c.linkPortifolio || 'Não informado');
     // Currículo
     const hasCurr = !!c.nomeCurriculo;
     set('ccCurrNome', hasCurr ? c.nomeCurriculo : 'Nenhum currículo enviado');
@@ -2512,12 +2525,13 @@ async function loadPerfil() {
 }
 
 function fillPerfil(c) {
-  if (c.telefone)       document.getElementById('pfTel').value      = c.telefone;
-  if (c.dataNascimento) document.getElementById('pfNasc').value     = c.dataNascimento;
-  if (c.cidade)         document.getElementById('pfCidade').value   = c.cidade;
-  if (c.linkLinkedin)   document.getElementById('pfLinkedin').value = c.linkLinkedin; // ← corrigido
-  if (c.linkGithub)     document.getElementById('pfGithub').value   = c.linkGithub;   // ← corrigido
-  if (c.bioCandidato)   document.getElementById('pfBio').value      = c.bioCandidato;
+  if (c.telefone)        document.getElementById('pfTel').value        = c.telefone;
+  if (c.dataNascimento)  document.getElementById('pfNasc').value       = c.dataNascimento;
+  if (c.cidade)          document.getElementById('pfCidade').value     = c.cidade;
+  if (c.linkLinkedin)    document.getElementById('pfLinkedin').value   = c.linkLinkedin;
+  if (c.linkGithub)      document.getElementById('pfGithub').value     = c.linkGithub;
+  if (c.linkPortifolio)  document.getElementById('pfPortifolio').value = c.linkPortifolio; // ← NOVO
+  if (c.bioCandidato)    document.getElementById('pfBio').value        = c.bioCandidato;
 }
 
 /* PATCH /api/candidatos/perfil  body: CandidatoAtualizarPerfilDTo */
@@ -2530,6 +2544,7 @@ async function doSavePerfil() {
     cidade:         v('pfCidade')   || null,
     linkedin:       v('pfLinkedin') || null,
     github:         v('pfGithub')   || null,
+    portifolio:     v('pfPortifolio')  || null,
     bio:            v('pfBio')      || null,
   };
   try {
@@ -2855,6 +2870,17 @@ async function verPerfilCandidato(candId) {
       gh.href = '#';
       gh.textContent = 'Não informado';
       gh.style.color = 'var(--gray-400)';
+    }
+
+    const pf = document.getElementById('mpPortifolio');
+    if (dto.portifolio) {      
+      pf.href = dto.portifolio;
+      pf.textContent = 'Abrir Portfólio';
+      pf.style.color = 'var(--red)';
+    } else {
+      pf.href = '#';
+      pf.textContent = 'Não informado';
+      pf.style.color = 'var(--gray-400)';
     }
 
     document.getElementById('mpBio').innerHTML = dto.bioCandidato 
