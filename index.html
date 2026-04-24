@@ -143,6 +143,15 @@ html.dark .nav-logo-box img{filter:brightness(0) invert(1)}
 .fhint{font-size:12px;color:var(--tx4)}
 
 /* ══════════════════════════════════════════════
+   PASSWORD TOGGLE
+   ══════════════════════════════════════════════ */
+.pw-wrap{position:relative;display:flex;align-items:center}
+.pw-wrap .fi{padding-right:42px;width:100%}
+.pw-eye{position:absolute;right:0;top:0;bottom:0;width:40px;display:flex;align-items:center;justify-content:center;background:none;border:none;cursor:pointer;color:var(--tx4);transition:color var(--t);border-radius:0 var(--r6) var(--r6) 0;padding:0;flex-shrink:0}
+.pw-eye:hover{color:var(--red)}
+.pw-eye svg{pointer-events:none}
+
+/* ══════════════════════════════════════════════
    TERMO DE RESPONSABILIDADE
    ══════════════════════════════════════════════ */
 .termo-box{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r10);padding:14px 16px;max-height:120px;overflow-y:auto;font-size:11.5px;color:var(--tx3);line-height:1.65;margin-bottom:4px}
@@ -809,7 +818,12 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
           </div>
           <div class="fg">
             <label class="fl">Senha <em>*</em></label>
-            <input type="password" class="fi" id="lSenha" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+            <div class="pw-wrap">
+              <input type="password" class="fi" id="lSenha" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+              <button type="button" class="pw-eye" onclick="togglePw('lSenha',this)" tabindex="-1" aria-label="Mostrar senha">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
           </div>
           <div id="lErr" class="ferr hidden"></div>
           <button class="btn btn-p w-full" id="lBtn" onclick="doLogin()">Entrar na conta</button>
@@ -876,11 +890,21 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
   <div class="frow">
     <div class="fg">
       <label class="fl">Senha <em>*</em></label>
-      <input type="password" class="fi" id="rcSenha" placeholder="Mín. 8 caracteres">
+      <div class="pw-wrap">
+        <input type="password" class="fi" id="rcSenha" placeholder="Mín. 8 caracteres">
+        <button type="button" class="pw-eye" onclick="togglePw('rcSenha',this)" tabindex="-1" aria-label="Mostrar senha">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
     </div>
     <div class="fg">
       <label class="fl">Confirmar Senha <em>*</em></label>
-      <input type="password" class="fi" id="rcSenha2" placeholder="Repita a senha">
+      <div class="pw-wrap">
+        <input type="password" class="fi" id="rcSenha2" placeholder="Repita a senha">
+        <button type="button" class="pw-eye" onclick="togglePw('rcSenha2',this)" tabindex="-1" aria-label="Mostrar senha">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1002,11 +1026,21 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
           <div class="frow">
             <div class="fg">
               <label class="fl">Senha <em>*</em></label>
-              <input type="password" class="fi" id="reSenha" placeholder="Mín. 8 caracteres">
+              <div class="pw-wrap">
+                <input type="password" class="fi" id="reSenha" placeholder="Mín. 8 caracteres">
+                <button type="button" class="pw-eye" onclick="togglePw('reSenha',this)" tabindex="-1" aria-label="Mostrar senha">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
             </div>
             <div class="fg">
               <label class="fl">Confirmar Senha <em>*</em></label>
-              <input type="password" class="fi" id="reSenha2" placeholder="Repita a senha">
+              <div class="pw-wrap">
+                <input type="password" class="fi" id="reSenha2" placeholder="Repita a senha">
+                <button type="button" class="pw-eye" onclick="togglePw('reSenha2',this)" tabindex="-1" aria-label="Mostrar senha">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
             </div>
           </div>
           <!-- Termo de Responsabilidade -->
@@ -2533,7 +2567,7 @@ async function loadCandidaturas() {
           <td data-label="Inscrito em" class="text-muted" style="font-size:12px">${fmtDateTime(c.dataInscricao)}</td>
           <td data-label="Status"><span class="badge b-${s.toLowerCase()}">${stLabel(s)}</span></td>
           <td class="tbl-acts">
-            <button class="btn btn-s btn-sm" onclick="verVagaCandidatura(${c.vagaId})">🔍 Ver Vaga</button>
+            <button class="btn btn-s btn-sm" onclick="verVagaCandidatura(${c.vagaId})">Ver Vaga</button>
             ${obsButton}
             <button class="btn btn-g btn-sm"
               ${!canDesist ? `disabled title="${s === 'REJEITADO' ? 'Sua candidatura foi encerrada pela empresa. Não é possível desistir.' : 'Você já desistiu desta candidatura.'}"` : 'title="Desistir do processo seletivo desta vaga. Esta ação é irreversível."'}
@@ -3149,6 +3183,19 @@ function resetRegCandCaptcha() {
     }
     window.regCandCaptchaToken = null;
 }
+/* ─────────────── TOGGLE SENHA ─────────────── */
+function togglePw(id, btn) {
+  const inp = document.getElementById(id);
+  if (!inp) return;
+  const showing = inp.type === 'text';
+  inp.type = showing ? 'password' : 'text';
+  // troca ícone: olho aberto ↔ olho com risco
+  btn.innerHTML = showing
+    ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
+    : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+  btn.setAttribute('aria-label', showing ? 'Mostrar senha' : 'Ocultar senha');
+}
+
 /* ─────────────── RESTAURAR SESSÃO ─────────────── */
 (async function restoreSession() {
   const t = localStorage.getItem('vf_t');
