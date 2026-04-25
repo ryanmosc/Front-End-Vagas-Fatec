@@ -373,6 +373,42 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
 .card-s-t{font-family:var(--fd);font-weight:700;font-size:15px;margin-bottom:18px;display:flex;align-items:center;gap:8px;padding-bottom:13px;border-bottom:1px solid var(--border);color:var(--tx1)}
 .pfhdr{background:var(--surface);border-radius:var(--r12);border:1px solid var(--border);padding:24px;display:flex;gap:18px;align-items:center;margin-bottom:20px}
 .pfav{width:68px;height:68px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--fd);font-weight:800;font-size:26px;flex-shrink:0;box-shadow:0 4px 12px var(--red-glow)}
+
+/* ── AVATAR COM FOTO DE PERFIL ── */
+.avatar-wrap{position:relative;flex-shrink:0;display:inline-block}
+.avatar-wrap img.avatar-img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;border:3px solid var(--red)}
+.avatar-wrap .avatar-fallback{width:100%;height:100%;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--fd);font-weight:800;box-shadow:0 4px 12px var(--red-glow)}
+.avatar-edit-btn{position:absolute;bottom:0;right:0;width:22px;height:22px;background:var(--red);border:2px solid var(--surface);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--t);transform:translate(2px,2px)}
+.avatar-edit-btn:hover{background:var(--red-dark);transform:translate(2px,2px) scale(1.1)}
+.avatar-edit-btn svg{pointer-events:none}
+.avatar-overlay{position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;cursor:pointer;flex-direction:column;gap:3px}
+.avatar-wrap:hover .avatar-overlay{opacity:1}
+.avatar-overlay span{color:#fff;font-size:10px;font-weight:700;letter-spacing:.03em}
+.avatar-wrap input[type=file]{display:none}
+/* Avatar pequeno na sidebar candidato */
+#csAv-wrap{width:46px;height:46px;margin-bottom:9px}
+#csAv-wrap .avatar-fallback{font-size:17px}
+/* Avatar pequeno no navbar */
+.nav-avatar-wrap{width:28px;height:28px}
+.nav-avatar-wrap .avatar-fallback{font-size:12px;box-shadow:none}
+.nav-avatar-wrap img.avatar-img{border-width:2px}
+/* Avatar modal confirmação */
+#ccAvatar-wrap{width:48px;height:48px}
+#ccAvatar-wrap .avatar-fallback{font-size:18px;box-shadow:none}
+/* Kanban: foto miniatura do candidato */
+.kb-cand-foto{width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;background:var(--surface2)}
+.kb-cand-foto-fallback{width:32px;height:32px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0}
+/* Modal perfil candidato: foto */
+#mpFoto-wrap{width:72px;height:72px;margin:0 auto 14px;display:block}
+#mpFoto-wrap .avatar-fallback{font-size:24px}
+/* Upload foto — dzone de foto */
+.photo-dzone{border:2px dashed var(--border);border-radius:var(--r12);padding:22px 16px;text-align:center;cursor:pointer;transition:var(--t);background:var(--surface2);position:relative;overflow:hidden}
+.photo-dzone:hover{border-color:var(--red);background:var(--red-muted)}
+.photo-dzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+@media(max-width:600px){
+  #csAv-wrap{width:40px;height:40px}
+  #csAv-wrap .avatar-fallback{font-size:15px}
+}
 .pfname{font-family:var(--fd);font-weight:700;font-size:18px;color:var(--tx1)}
 .pfmeta{font-size:13px;color:var(--tx3);margin-top:2px}
 
@@ -699,7 +735,9 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
     </div>
     <div class="hidden" id="navUser">
       <div class="nav-user" onclick="doLogout()">
-        <div class="nav-avatar" id="uAvatar">?</div>
+        <div class="avatar-wrap nav-avatar-wrap" id="uAvatarWrap" style="width:28px;height:28px">
+          <div class="avatar-fallback" id="uAvatar" style="font-size:12px;box-shadow:none">?</div>
+        </div>
         <span id="uName">Usuário</span>
       </div>
     </div>
@@ -1077,7 +1115,9 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
   <div class="dash-lay">
     <aside class="dash-side">
       <div style="padding:0 8px 18px">
-        <div style="width:46px;height:46px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--fd);font-weight:800;font-size:17px;margin-bottom:9px" id="csAv">?</div>
+        <div class="avatar-wrap" id="csAv-wrap" style="width:46px;height:46px;margin-bottom:9px">
+          <div class="avatar-fallback" id="csAv" style="font-size:17px">?</div>
+        </div>
         <div style="font-weight:700;font-size:14px" id="csNome">—</div>
         <div class="text-muted" style="font-size:12px" id="csMeta">—</div>
         <div style="margin-top:6px"><span class="badge b-ativo" style="font-size:10px">✓ Ativo</span></div>
@@ -1169,7 +1209,18 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
       <div id="dt-perfil" class="dtab hidden">
         <div class="sec-title">Meu Perfil</div>
         <div class="pfhdr">
-          <div class="pfav" id="pfAv">?</div>
+          <!-- Avatar com upload integrado -->
+          <div class="avatar-wrap" id="pfAv-wrap" style="width:68px;height:68px" title="Clique para alterar sua foto de perfil">
+            <div class="avatar-fallback" id="pfAv" style="font-size:26px">?</div>
+            <div class="avatar-overlay" onclick="document.getElementById('pfFotoInput').click()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              <span>Alterar</span>
+            </div>
+            <div class="avatar-edit-btn" onclick="document.getElementById('pfFotoInput').click()" title="Alterar foto">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="3"/></svg>
+            </div>
+            <input type="file" id="pfFotoInput" accept="image/jpeg,image/jpg,image/png" onchange="uploadFotoPerfil(this)">
+          </div>
           <div>
             <div class="pfname" id="pfNome">—</div>
             <div class="pfmeta" id="pfEmail">—</div>
@@ -1220,7 +1271,38 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
 
       <!-- TAB: Currículo — PATCH /api/candidatos/perfil/curriculo (multipart) -->
       <div id="dt-curriculo" class="dtab hidden">
-        <div class="sec-title">Currículo</div>
+        <div class="sec-title">Currículo & Foto de Perfil</div>
+
+        <!-- NOVA: Seção de Foto de Perfil -->
+        <div class="card-s" style="margin-bottom:16px">
+          <div class="card-s-t">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Foto de Perfil
+          </div>
+          <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+            <!-- Preview da foto atual -->
+            <div class="avatar-wrap" id="currFoto-wrap" style="width:80px;height:80px;flex-shrink:0">
+              <div class="avatar-fallback" id="currFotoFallback" style="font-size:28px">?</div>
+              <div class="avatar-overlay" onclick="document.getElementById('currFotoInput').click()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                <span>Alterar</span>
+              </div>
+              <div class="avatar-edit-btn" onclick="document.getElementById('currFotoInput').click()">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="3"/></svg>
+              </div>
+              <input type="file" id="currFotoInput" accept="image/jpeg,image/jpg,image/png" onchange="uploadFotoPerfil(this)">
+            </div>
+            <div style="flex:1;min-width:180px">
+              <div style="font-weight:700;font-size:14px;color:var(--tx1);margin-bottom:4px">Foto de Perfil</div>
+              <div style="font-size:12px;color:var(--tx3);line-height:1.6;margin-bottom:10px">Formatos aceitos: JPG e PNG · Máximo 5 MB.<br>Sua foto fica visível para empresas nas candidaturas.</div>
+              <button class="btn btn-s btn-sm" onclick="document.getElementById('currFotoInput').click()" id="fotoUploadBtn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                Enviar Foto
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div class="card-s">
           <div class="card-s-t">📄 Upload de Currículo</div>
           <div class="dzone" id="dzone" ondragover="dzOver(event)" ondragleave="dzLeave()" ondrop="dzDrop(event)">
@@ -1517,7 +1599,9 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
 
     <!-- Cabeçalho do candidato -->
     <div class="cc-cand-hdr">
-      <div class="cc-avatar" id="ccAvatar">?</div>
+      <div class="avatar-wrap" id="ccAvatar-wrap" style="width:48px;height:48px;flex-shrink:0">
+        <div class="avatar-fallback" id="ccAvatar" style="font-size:18px;box-shadow:none">?</div>
+      </div>
       <div style="min-width:0">
         <div class="cc-nome" id="ccNome">—</div>
         <div class="cc-email" id="ccEmail">—</div>
@@ -1686,6 +1770,17 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
         <div class="text-muted text-sm mt-1">Dados completos do candidato</div>
       </div>
       <button class="mx" onclick="closeModal('mPerfilCand')">✕</button>
+    </div>
+    <!-- Foto + nome do candidato -->
+    <div style="display:flex;align-items:center;gap:16px;padding:14px 0 18px;border-bottom:1px solid var(--border);margin-bottom:16px">
+      <div class="avatar-wrap" id="mpFoto-wrap" style="width:72px;height:72px;flex-shrink:0">
+        <div class="avatar-fallback" id="mpFotoFallback" style="font-size:24px">?</div>
+      </div>
+      <div>
+        <div style="font-family:var(--fd);font-weight:700;font-size:16px;color:var(--tx1)" id="mpNomeDetalhe">—</div>
+        <div style="font-size:12px;color:var(--tx3);margin-top:3px">Candidato</div>
+        <button class="btn btn-s btn-sm" style="margin-top:8px" id="mpCurrBtn" onclick="viewCVEmpresaFromModal()">📄 Ver Currículo</button>
+      </div>
     </div>
     <div class="card-s">
       <div class="fstack">
@@ -2030,17 +2125,20 @@ async function doCandidatar() {
 
     // Preenche cabeçalho
     const ini = initials(c.nomeCompleto);
-    document.getElementById('ccAvatar').textContent      = ini;
+    document.getElementById('ccAvatar').textContent = ini;
+    // Remove foto anterior do modal de confirmação
+    const ccWrap = document.getElementById('ccAvatar-wrap');
+    if (ccWrap) { const old = ccWrap.querySelector('img.avatar-img'); if (old) { URL.revokeObjectURL(old.src); old.remove(); } const fb = ccWrap.querySelector('.avatar-fallback'); if (fb) fb.style.display = ''; }
     set('ccNome',   c.nomeCompleto   || '—');
     set('ccEmail',  c.emailCandidato || '—');
     set('ccRA',     c.raAluno ? `RA: ${c.raAluno}` : '—');
 
     // Preenche dados
-    set('ccTel',     c.telefone       || 'Não informado');
-    set('ccCidade',  c.cidade         || 'Não informada');
-    set('ccNasc',    c.dataNascimento ? fmtDate(c.dataNascimento) : 'Não informada');
-    set('ccLinkedin',c.linkLinkedin   || 'Não informado');
-    set('ccPortifolio',c.linkPortifolio || 'Não informado');
+    set('ccTel',       c.telefone        || 'Não informado');
+    set('ccCidade',    c.cidade          || 'Não informada');
+    set('ccNasc',      c.dataNascimento  ? fmtDate(c.dataNascimento) : 'Não informada');
+    set('ccLinkedin',  c.linkLinkedin    || 'Não informado');
+    set('ccPortifolio',c.linkPortifolio  || 'Não informado');
     // Currículo
     const hasCurr = !!c.nomeCurriculo;
     set('ccCurrNome', hasCurr ? c.nomeCurriculo : 'Nenhum currículo enviado');
@@ -2054,6 +2152,16 @@ async function doCandidatar() {
     set('ccVagaEmpresa', vaga?.nomeEmpresa || '—');
 
     openModal('mConfirmCand');
+
+    // Carrega foto do próprio candidato no modal de confirmação
+    carregarFotoEmWrap('ccAvatar-wrap', 'ccAvatar', async () => {
+      const res = await fetch(`${BASE}/api/candidatos/perfil/foto/visualizar`, {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      if (res.status === 204 || !res.ok) return null;
+      return URL.createObjectURL(await res.blob());
+    });
+
   } catch(e) { apiErr(e); }
   finally { setLoad(btn, false); }
 }
@@ -2339,6 +2447,8 @@ async function setupCandSidebar() {
       set('currNome', c.nomeCurriculo);
       document.getElementById('currAtual').classList.remove('hidden');
     }
+    // Foto de perfil — carrega assincronamente após o sidebar
+    carregarMinhaFoto();
   } catch {}
 }
 
@@ -2660,6 +2770,9 @@ async function loadPerfil() {
     set('pfAv', ini); set('pfNome', c.nomeCompleto);
     set('pfEmail', c.emailCandidato); set('pfRA', `RA: ${c.raAluno}`);
     fillPerfil(c);
+    // Atualiza iniciais nos wrappers e recarrega foto
+    set('csAv', ini);
+    carregarMinhaFoto();
   } catch(e) { apiErr(e); }
 }
 
@@ -2703,6 +2816,11 @@ async function loadCurriculoInfo() {
     } else {
       document.getElementById('currAtual').classList.add('hidden');
     }
+    // Sincroniza iniciais no wrap da aba currículo e carrega foto
+    const ini = initials(c.nomeCompleto);
+    const fb = document.getElementById('currFotoFallback');
+    if (fb) fb.textContent = ini;
+    carregarMinhaFoto();
   } catch {}
 }
 
@@ -2944,15 +3062,24 @@ async function loadKanban() {
       const cards = items.map(c => {
         // Regra de negócio: botões ficam congelados se status já final
         const final = col.key === 'APROVADO' || col.key === 'REJEITADO';
+        const nomeExib = esc(c.empresaNome || 'Candidato #' + c.candidatoId);
+        const ini2 = (c.empresaNome||'C').split(' ').map(n=>n[0]).filter(Boolean).join('').toUpperCase().slice(0,2);
         return `<div class="kb-card">
-          <div class="kb-name">${esc(c.empresaNome || 'Candidato #' + c.candidatoId)}</div>
-          <div class="kb-sub">Candidatura #${c.id} · Vaga #${c.vagaId}</div>
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:6px">
+            <div class="avatar-wrap kb-cand-foto-wrap" id="kbFoto-${c.id}" style="width:32px;height:32px;flex-shrink:0">
+              <div class="avatar-fallback" style="font-size:11px;font-weight:700;box-shadow:none">${ini2}</div>
+            </div>
+            <div>
+              <div class="kb-name" style="margin-bottom:0">${nomeExib}</div>
+              <div class="kb-sub">Candidatura #${c.id}</div>
+            </div>
+          </div>
           ${c.observacaoEmpresa ? `<div class="kb-obs">📝 ${esc(c.observacaoEmpresa)}</div>` : ''}
           <div class="kb-acts">
             <!-- GET /api/candidatos/perfil/curriculo/visualizar/{id_candidatura}/candidatura -->
             <button class="btn btn-s btn-sm" style="flex:1" onclick="viewCVEmpresa(${c.id})">📄 CV</button>
             <!-- NOVO BOTÃO: Ver Perfil Completo do Candidato (consome /api/candidatos/perfil/todos/{candidatoId}) -->
-            <button class="btn btn-s btn-sm" onclick="verPerfilCandidato(${c.candidatoId})">👤 Perfil</button>
+            <button class="btn btn-s btn-sm" onclick="verPerfilCandidato(${c.candidatoId}, ${c.id})">👤 Perfil</button>
             <button class="btn btn-g btn-sm" onclick="openObs(${c.id}, '${esc(c.empresaNome||'').replace(/'/g,"\\'")}')">📝 Obs.</button>
             <!-- PATCH /api/candidaturas/empresa/candidatura/{id}/novo_status?status=X -->
             <button class="btn btn-sm kb-btn-analise" ${final?'disabled title="Este candidato já teve seu processo encerrado e não pode ser movido."':''} onclick="doStatus(${c.id},'EM_ANALISE')" title="Mover para Em Análise: o candidato será notificado de que está sendo avaliado.">🔍</button>
@@ -2970,6 +3097,12 @@ async function loadKanban() {
         <div class="kb-items">${cards}</div>
       </div>`;
     }).join('');
+
+    // Carrega fotos dos candidatos assincronamente (sem bloquear o render)
+    list.forEach(c => {
+      carregarFotoKanban(c.id);
+    });
+
   } catch(e) { loading.classList.add('hidden'); apiErr(e); }
 }
 
@@ -2977,59 +3110,51 @@ async function loadKanban() {
 
 
 /* NOVO: GET /api/candidatos/perfil/todos/{candId} → CandidatoMostrarDTO */
-async function verPerfilCandidato(candId) {
-  if (!candId) {
-    toast('er', 'ID inválido', 'Não foi possível identificar o candidato.');
-    return;
-  }
+// Guarda candidaturaId do modal aberto (para empresa ver CV)
+let mpCandidaturaId = null;
+
+async function verPerfilCandidato(candId, candidaturaId) {
+  if (!candId) { toast('er', 'ID inválido', 'Não foi possível identificar o candidato.'); return; }
+  mpCandidaturaId = candidaturaId || null;
   try {
     const dto = await req('GET', `/api/candidatos/perfil/todos/${candId}`);
-
-    document.getElementById('mpNome').textContent   = dto.nomeCompleto || '—';
-    document.getElementById('mpTel').textContent    = dto.telefone || 'Não informado';
-    document.getElementById('mpCidade').textContent = dto.cidade || 'Não informado';
-
+    const ini = (dto.nomeCompleto||'C').split(' ').map(n=>n[0]).filter(Boolean).join('').toUpperCase().slice(0,2);
+    document.getElementById('mpNome').textContent        = dto.nomeCompleto || '—';
+    document.getElementById('mpNomeDetalhe').textContent = dto.nomeCompleto || '—';
+    document.getElementById('mpTel').textContent         = dto.telefone || 'Não informado';
+    document.getElementById('mpCidade').textContent      = dto.cidade || 'Não informado';
+    const fb = document.getElementById('mpFotoFallback'); if (fb) fb.textContent = ini;
+    // Remove foto anterior se houver
+    const wrap = document.getElementById('mpFoto-wrap');
+    if (wrap) { const old = wrap.querySelector('img.avatar-img'); if (old) old.remove(); }
+    const currBtn = document.getElementById('mpCurrBtn');
+    if (currBtn) currBtn.style.display = candidaturaId ? '' : 'none';
     const ln = document.getElementById('mpLinkedin');
-    if (dto.linkedin) {
-      ln.href = dto.linkedin;
-      ln.textContent = 'Abrir LinkedIn';
-      ln.style.color = 'var(--red)';
-    } else {
-      ln.href = '#';
-      ln.textContent = 'Não informado';
-      ln.style.color = 'var(--gray-400)';
-    }
-
+    if (dto.linkedin) { ln.href = dto.linkedin; ln.textContent = 'Abrir LinkedIn'; ln.style.color = 'var(--red)'; }
+    else { ln.href = '#'; ln.textContent = 'Não informado'; ln.style.color = 'var(--tx4)'; }
     const gh = document.getElementById('mpGithub');
-    if (dto.github) {
-      gh.href = dto.github;
-      gh.textContent = 'Abrir GitHub';
-      gh.style.color = 'var(--red)';
-    } else {
-      gh.href = '#';
-      gh.textContent = 'Não informado';
-      gh.style.color = 'var(--gray-400)';
-    }
-
+    if (dto.github) { gh.href = dto.github; gh.textContent = 'Abrir GitHub'; gh.style.color = 'var(--red)'; }
+    else { gh.href = '#'; gh.textContent = 'Não informado'; gh.style.color = 'var(--tx4)'; }
     const pf = document.getElementById('mpPortifolio');
-    if (dto.portifolio) {      
-      pf.href = dto.portifolio;
-      pf.textContent = 'Abrir Portfólio';
-      pf.style.color = 'var(--red)';
-    } else {
-      pf.href = '#';
-      pf.textContent = 'Não informado';
-      pf.style.color = 'var(--gray-400)';
-    }
-
-    document.getElementById('mpBio').innerHTML = dto.bioCandidato 
-      ? esc(dto.bioCandidato).replace(/\n/g, '<br>') 
-      : 'Não informado';
-
+    if (dto.portifolio) { pf.href = dto.portifolio; pf.textContent = 'Abrir Portfólio'; pf.style.color = 'var(--red)'; }
+    else { pf.href = '#'; pf.textContent = 'Não informado'; pf.style.color = 'var(--tx4)'; }
+    document.getElementById('mpBio').innerHTML = dto.bioCandidato
+      ? esc(dto.bioCandidato).replace(/\n/g, '<br>') : 'Não informado';
     openModal('mPerfilCand');
-  } catch(e) {
-    apiErr(e);
-  }
+    if (candidaturaId) {
+      carregarFotoEmWrap('mpFoto-wrap', 'mpFotoFallback', async () => {
+        const res = await fetch(`${BASE}/api/candidatos/perfil/foto/visualizar/${candidaturaId}/candidatura`,
+          { headers: { 'Authorization': 'Bearer ' + token } });
+        if (res.status === 204 || !res.ok) return null;
+        return URL.createObjectURL(await res.blob());
+      });
+    }
+  } catch(e) { apiErr(e); }
+}
+
+async function viewCVEmpresaFromModal() {
+  if (!mpCandidaturaId) return;
+  await viewCVEmpresa(mpCandidaturaId);
 }
 
 /* PATCH /api/candidaturas/empresa/candidatura/{id}/novo_status?status=X */
@@ -3194,6 +3319,161 @@ function togglePw(id, btn) {
     ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
     : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
   btn.setAttribute('aria-label', showing ? 'Mostrar senha' : 'Ocultar senha');
+}
+
+/* ─────────────── FOTO DE PERFIL ─────────────── */
+
+/**
+ * Carrega uma URL de foto em um avatar-wrap, substituindo o fallback por <img>.
+ * @param {string} wrapId   — id do div.avatar-wrap
+ * @param {string} fbId     — id do div.avatar-fallback (para esconder quando tem foto)
+ * @param {Function} fetcher — async function que retorna uma objectURL string ou null
+ */
+async function carregarFotoEmWrap(wrapId, fbId, fetcher) {
+  const wrap = document.getElementById(wrapId);
+  if (!wrap) return;
+  // Remove img anterior
+  const anterior = wrap.querySelector('img.avatar-img');
+  if (anterior) { URL.revokeObjectURL(anterior.src); anterior.remove(); }
+  try {
+    const url = await fetcher();
+    if (!url) return;
+    const fb = document.getElementById(fbId);
+    if (fb) fb.style.display = 'none';
+    const img = document.createElement('img');
+    img.className = 'avatar-img';
+    img.src = url;
+    img.alt = 'Foto de perfil';
+    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;';
+    wrap.style.position = 'relative';
+    wrap.insertBefore(img, wrap.firstChild);
+  } catch { /* sem foto — mantém fallback */ }
+}
+
+/**
+ * Carrega a foto do próprio candidato e atualiza todos os avatars na página.
+ */
+async function carregarMinhaFoto() {
+  try {
+    const res = await fetch(`${BASE}/api/candidatos/perfil/foto/visualizar`, {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    if (res.status === 204 || !res.ok) return;
+    const url = URL.createObjectURL(await res.blob());
+    // Atualiza todos os wraps do candidato
+    ['pfAv-wrap','csAv-wrap','currFoto-wrap'].forEach(wid => {
+      const wrap = document.getElementById(wid);
+      if (!wrap) return;
+      const fbId = wid.replace('-wrap','').replace('currFoto','currFotoFallback')
+                       .replace('pfAv','pfAv').replace('csAv','csAv');
+      // Remove img anterior
+      const old = wrap.querySelector('img.avatar-img');
+      if (old) { URL.revokeObjectURL(old.src); old.remove(); }
+      // Esconde fallback
+      const fb = wrap.querySelector('.avatar-fallback');
+      if (fb) fb.style.display = 'none';
+      // Insere img
+      const img = document.createElement('img');
+      img.className = 'avatar-img';
+      img.src = url;
+      img.alt = 'Foto de perfil';
+      img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;';
+      wrap.style.position = 'relative';
+      wrap.insertBefore(img, wrap.firstChild);
+    });
+    // Navbar: uAvatarWrap
+    const navWrap = document.getElementById('uAvatarWrap');
+    if (navWrap) {
+      const oldNav = navWrap.querySelector('img.avatar-img');
+      if (oldNav) { URL.revokeObjectURL(oldNav.src); oldNav.remove(); }
+      const fb = navWrap.querySelector('.avatar-fallback');
+      if (fb) fb.style.display = 'none';
+      const img2 = document.createElement('img');
+      img2.className = 'avatar-img';
+      img2.src = url;
+      img2.alt = 'Foto de perfil';
+      img2.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;border:2px solid var(--red);';
+      navWrap.style.position = 'relative';
+      navWrap.insertBefore(img2, navWrap.firstChild);
+    }
+  } catch { /* sem foto — silencioso */ }
+}
+
+/**
+ * Faz upload da foto de perfil do candidato.
+ * @param {HTMLInputElement} input
+ */
+async function uploadFotoPerfil(input) {
+  const file = input.files?.[0];
+  if (!file) return;
+  const tipos = ['image/jpeg','image/jpg','image/png'];
+  if (!tipos.includes(file.type)) { toast('er','Formato inválido','Apenas JPG e PNG são aceitos.'); input.value=''; return; }
+  if (file.size > 5 * 1024 * 1024) { toast('er','Arquivo muito grande','Máximo 5 MB.'); input.value=''; return; }
+
+  const fd = new FormData();
+  fd.append('fotoPerfil', file);
+
+  // Feedback visual imediato com preview local
+  const previewUrl = URL.createObjectURL(file);
+  ['pfAv-wrap','csAv-wrap','currFoto-wrap'].forEach(wid => {
+    const wrap = document.getElementById(wid);
+    if (!wrap) return;
+    const old = wrap.querySelector('img.avatar-img');
+    if (old) { URL.revokeObjectURL(old.src); old.remove(); }
+    const fb = wrap.querySelector('.avatar-fallback');
+    if (fb) fb.style.display = 'none';
+    const img = document.createElement('img');
+    img.className = 'avatar-img';
+    img.src = previewUrl;
+    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;';
+    wrap.style.position = 'relative';
+    wrap.insertBefore(img, wrap.firstChild);
+  });
+
+  try {
+    const res = await fetch(`${BASE}/api/candidatos/perfil/foto`, {
+      method: 'PATCH',
+      headers: { 'Authorization': 'Bearer ' + token },
+      body: fd
+    });
+    if (!res.ok) {
+      const d = await res.json().catch(() => ({}));
+      throw new Error(d.message || `Erro ${res.status}`);
+    }
+    toast('ok','Foto atualizada!','Foto de perfil salva com sucesso.');
+  } catch(e) {
+    toast('er','Erro no upload', e.message);
+    // Reverte o preview em caso de erro
+    await carregarMinhaFoto();
+  } finally {
+    input.value = '';
+  }
+}
+
+/**
+ * Carrega foto de um candidato no Kanban (via candidatura) de forma assíncrona.
+ * @param {number} candidaturaId
+ */
+async function carregarFotoKanban(candidaturaId) {
+  const wrapId = `kbFoto-${candidaturaId}`;
+  const wrap = document.getElementById(wrapId);
+  if (!wrap) return;
+  try {
+    const res = await fetch(`${BASE}/api/candidatos/perfil/foto/visualizar/${candidaturaId}/candidatura`, {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    if (res.status === 204 || !res.ok) return;
+    const url = URL.createObjectURL(await res.blob());
+    const fb = wrap.querySelector('.avatar-fallback');
+    if (fb) fb.style.display = 'none';
+    const img = document.createElement('img');
+    img.className = 'avatar-img';
+    img.src = url;
+    img.alt = 'Foto';
+    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;';
+    wrap.style.position = 'relative';
+    wrap.insertBefore(img, wrap.firstChild);
+  } catch { /* sem foto — mantém iniciais */ }
 }
 
 /* ─────────────── RESTAURAR SESSÃO ─────────────── */
