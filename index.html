@@ -1081,6 +1081,16 @@ html.dark .b-hibrido{background:rgba(196,138,255,.12);color:#D8B4FE}
               </div>
             </div>
           </div>
+
+          <!-- reCAPTCHA para Empresa -->
+          <div class="fg" style="margin-top: 16px; margin-bottom: 8px;">
+              <div class="g-recaptcha" 
+                  id="recaptchaEmpresa"
+                  data-sitekey="6LcgtaYsAAAAAMGxta8WA75pZ22bSIshXxColQtm"
+                  data-callback="onRegEmpCaptchaSuccess"
+                  data-expired-callback="onRegEmpCaptchaExpired"></div>
+          </div>
+
           <!-- Termo de Responsabilidade -->
           <div class="fg" style="gap:8px">
             <div class="termo-box">
@@ -1909,7 +1919,7 @@ function toggleDark() {
 })();
 
 /* ─────────────── ESTADO GLOBAL ─────────────── */
-const BASE = 'https://apivagas.voluntariosdasaude.com.br';
+const BASE = 'http://localhost:8080';
 let token      = null;
 let role       = null;   // 'ROLE_CANDIDATO' | 'ROLE_EMPRESA'
 let userId     = null;
@@ -2433,61 +2443,69 @@ function codeBack(e, inp, idx) {
 
 /* ─────────────── CADASTRO EMPRESA ─────────────── */
 /* POST /api/empresas  →  EmpresaResponseDTO (201) */
-/* ─────────────── CADASTRO EMPRESA ─────────────── */
+/* ─────────────── CADASTRO EMPRESA COM reCAPTCHA ─────────────── */
 async function doRegEmp() {
-  const razaoSocial  = v('reRazao');
-  const nomeFantasia = v('reFantasia');
-  const cnpj         = v('reCNPJ');
-  const email        = v('reEmail');
-  const telefone     = v('reTel');
-  const senha        = v('reSenha');
-  const senha2       = v('reSenha2');
+    const razaoSocial  = v('reRazao');
+    const nomeFantasia = v('reFantasia');
+    const cnpj         = v('reCNPJ');
+    const email        = v('reEmail');
+    const telefone     = v('reTel');
+    const senha        = v('reSenha');
+    const senha2       = v('reSenha2');
+    const captchaToken = window.regEmpCaptchaToken;
 
-  clearErr('reErr');
+    clearErr('reErr');
 
-  if (!razaoSocial || !nomeFantasia || !cnpj || !email || !telefone || !senha) {
-    showErr('reErr', 'Preencha todos os campos obrigatórios.');
-    return;
-  }
-  if (senha !== senha2) {
-    showErr('reErr', 'As senhas não coincidem.');
-    return;
-  }
-  if (!document.getElementById('reTermos')?.checked) {
-    showErr('reErr', 'Você precisa aceitar o Termo de Responsabilidade.');
-    return;
-  }
+    if (!razaoSocial || !nomeFantasia || !cnpj || !email || !telefone || !senha) {
+        showErr('reErr', 'Preencha todos os campos obrigatórios.');
+        return;
+    }
+    if (senha !== senha2) {
+        showErr('reErr', 'As senhas não coincidem.');
+        return;
+    }
+    if (!captchaToken) {
+        showErr('reErr', 'Por favor, marque o reCAPTCHA "Não sou um robô".');
+        return;
+    }
+    if (!document.getElementById('reTermos')?.checked) {
+        showErr('reErr', 'Você precisa aceitar o Termo de Responsabilidade.');
+        return;
+    }
 
-  const btn = document.getElementById('reBtn');
-  setLoad(btn, true);
+    const btn = document.getElementById('reBtn');
+    setLoad(btn, true);
 
-  try {
-    await req('POST', '/api/empresas', {
-      razaoSocial,
-      nomeFantasia,
-      cnpj,
-      email,
-      telefone,
-      senha
-    });
+    try {
+        await req('POST', '/api/empresas', {
+            razaoSocial,
+            nomeFantasia,
+            cnpj,
+            email,
+            telefone,
+            senha,
+            captcha: captchaToken          // ← Enviando o token do reCAPTCHA
+        });
 
-    // === NOVA LÓGICA: vai para verificação de e-mail ===
-    pendEmail = email;
-    document.getElementById('verifyEmail').textContent = email;
-    
-    // Marca que a verificação é de empresa
-    window.isVerifyingEmpresa = true;
+        // Sucesso → vai para tela de verificação
+        pendEmail = email;
+        document.getElementById('verifyEmail').textContent = email;
+        window.isVerifyingEmpresa = true;
 
-    showPage('verify');
-    startTimer();
+        showPage('verify');
+        startTimer();
 
-    toast('ok', 'Empresa cadastrada!', 'Verifique seu e-mail para ativar a conta.');
+        // Reset captcha após sucesso
+        resetRegEmpCaptcha();
 
-  } catch(e) {
-    showErr('reErr', e.message || 'Erro ao cadastrar empresa');
-  } finally {
-    setLoad(btn, false);
-  }
+        toast('ok', 'Empresa cadastrada!', 'Verifique seu e-mail para ativar a conta.');
+
+    } catch(e) {
+        showErr('reErr', e.message || 'Erro ao cadastrar empresa');
+        resetRegEmpCaptcha();   // Reset para tentar novamente
+    } finally {
+        setLoad(btn, false);
+    }
 }
 
 /* ─────────────── SETUP SIDEBARS PÓS-LOGIN ─────────────── */
@@ -3536,6 +3554,25 @@ async function carregarFotoKanban(candidaturaId) {
     wrap.style.position = 'relative';
     wrap.insertBefore(img, wrap.firstChild);
   } catch { /* sem foto — mantém iniciais */ }
+}
+/* ==================== reCAPTCHA - CADASTRO EMPRESA ==================== */
+
+// Callback quando o usuário marca o checkbox com sucesso
+function onRegEmpCaptchaSuccess(token) {
+    window.regEmpCaptchaToken = token;
+}
+
+// Callback quando o captcha expira
+function onRegEmpCaptchaExpired() {
+    window.regEmpCaptchaToken = null;
+}
+
+// Resetar o captcha da empresa
+function resetRegEmpCaptcha() {
+    if (typeof grecaptcha !== "undefined") {
+        grecaptcha.reset(document.getElementById('recaptchaEmpresa'));
+    }
+    window.regEmpCaptchaToken = null;
 }
 
 /* ─────────────── RESTAURAR SESSÃO ─────────────── */
