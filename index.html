@@ -2318,39 +2318,71 @@ async function doRegCand() {
 
 /* ─────────────── VERIFICAÇÃO DE E-MAIL ─────────────── */
 /* POST /api/candidatos/validar  body: { email, codigoEmail } → 204 */
+/* ─────────────── VERIFICAÇÃO DE E-MAIL (Candidato ou Empresa) ─────────────── */
 async function doVerify() {
   const code = [...document.querySelectorAll('.code-inp')].map(i => i.value).join('').toUpperCase();
   clearErr('verifyErr');
-  if (code.length < 6) { showErr('verifyErr', 'Insira todos os 6 dígitos.'); return; }
+
+  if (code.length < 6) {
+    showErr('verifyErr', 'Insira todos os 6 dígitos.');
+    return;
+  }
 
   const btn = document.getElementById('verifyBtn');
   setLoad(btn, true);
+
   try {
-    await req('POST', '/api/candidatos/validar', { email: pendEmail, codigoEmail: code });
-    clearInterval(timerA); clearInterval(timerB);
-    toast('ok', 'E-mail verificado!', 'Conta ativada. Faça login para continuar.');
+    if (window.isVerifyingEmpresa) {
+      // Validação para Empresa
+      await req('POST', '/api/candidatos/validar/empresa', {
+        email: pendEmail,
+        codigoEmail: code   // ← ajustado conforme seu DTO ValidarEmpresaDTO
+      });
+      toast('ok', 'Empresa verificada!', 'Conta ativada com sucesso.');
+    } else {
+      // Validação para Candidato (comportamento antigo)
+      await req('POST', '/api/candidatos/validar', {
+        email: pendEmail,
+        codigoEmail: code
+      });
+      toast('ok', 'E-mail verificado!', 'Conta ativada com sucesso.');
+    }
+
+    // Limpeza
+    clearInterval(timerA);
+    clearInterval(timerB);
+    window.isVerifyingEmpresa = false;
+
     showPage('login');
-  } catch(e) { showErr('verifyErr', e.message); }
-  finally { setLoad(btn, false); }
+    // Limpa campos de verificação
+    document.querySelectorAll('.code-inp').forEach(i => i.value = '');
+
+  } catch(e) {
+    showErr('verifyErr', e.message || 'Código inválido ou expirado.');
+  } finally {
+    setLoad(btn, false);
+  }
 }
 
+
 async function doResend() {
+  const btn = document.getElementById('resendBtn');
+  setLoad(btn, true);
+
   try {
-    const res = await fetch(`${BASE}/api/candidatos/validar/reenviar?email=${encodeURIComponent(pendEmail)}`, {
+    await fetch(`${BASE}/api/candidatos/validar/reenviar?email=${encodeURIComponent(pendEmail)}`, {
       method: 'POST'
     });
 
-    if (!res.ok) {
-      throw new Error('Erro na requisição');
-    }
-
-    toast('ok', 'Código reenviado!', 'Verifique seu e-mail.');
+    toast('ok', 'Código reenviado!', 'Verifique seu e-mail novamente.');
     document.querySelectorAll('.code-inp').forEach(i => i.value = '');
     document.querySelectorAll('.code-inp')[0]?.focus();
     startTimer();
 
-  } catch {
-    toast('er', 'Erro', 'Não foi possível reenviar.');
+  } catch(e) {
+    toast('er', 'Erro', 'Não foi possível reenviar o código.');
+  } finally {
+    setLoad(btn, false);
   }
 }
 
@@ -2401,6 +2433,7 @@ function codeBack(e, inp, idx) {
 
 /* ─────────────── CADASTRO EMPRESA ─────────────── */
 /* POST /api/empresas  →  EmpresaResponseDTO (201) */
+/* ─────────────── CADASTRO EMPRESA ─────────────── */
 async function doRegEmp() {
   const razaoSocial  = v('reRazao');
   const nomeFantasia = v('reFantasia');
@@ -2409,23 +2442,52 @@ async function doRegEmp() {
   const telefone     = v('reTel');
   const senha        = v('reSenha');
   const senha2       = v('reSenha2');
+
   clearErr('reErr');
 
-  if (!razaoSocial || !nomeFantasia || !cnpj || !email || !telefone || !senha)
-    { showErr('reErr', 'Preencha todos os campos obrigatórios.'); return; }
-  if (senha !== senha2)
-    { showErr('reErr', 'As senhas não coincidem.'); return; }
-  if (!document.getElementById('reTermos')?.checked)
-    { showErr('reErr', 'Você precisa aceitar o Termo de Responsabilidade para continuar.'); return; }
+  if (!razaoSocial || !nomeFantasia || !cnpj || !email || !telefone || !senha) {
+    showErr('reErr', 'Preencha todos os campos obrigatórios.');
+    return;
+  }
+  if (senha !== senha2) {
+    showErr('reErr', 'As senhas não coincidem.');
+    return;
+  }
+  if (!document.getElementById('reTermos')?.checked) {
+    showErr('reErr', 'Você precisa aceitar o Termo de Responsabilidade.');
+    return;
+  }
 
   const btn = document.getElementById('reBtn');
   setLoad(btn, true);
+
   try {
-    await req('POST', '/api/empresas', { razaoSocial, nomeFantasia, cnpj, email, telefone, senha });
-    toast('ok', 'Empresa cadastrada!', 'Conta criada e ativa. Faça login para continuar.');
-    showPage('login');
-  } catch(e) { showErr('reErr', e.message); }
-  finally { setLoad(btn, false); }
+    await req('POST', '/api/empresas', {
+      razaoSocial,
+      nomeFantasia,
+      cnpj,
+      email,
+      telefone,
+      senha
+    });
+
+    // === NOVA LÓGICA: vai para verificação de e-mail ===
+    pendEmail = email;
+    document.getElementById('verifyEmail').textContent = email;
+    
+    // Marca que a verificação é de empresa
+    window.isVerifyingEmpresa = true;
+
+    showPage('verify');
+    startTimer();
+
+    toast('ok', 'Empresa cadastrada!', 'Verifique seu e-mail para ativar a conta.');
+
+  } catch(e) {
+    showErr('reErr', e.message || 'Erro ao cadastrar empresa');
+  } finally {
+    setLoad(btn, false);
+  }
 }
 
 /* ─────────────── SETUP SIDEBARS PÓS-LOGIN ─────────────── */
